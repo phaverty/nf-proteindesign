@@ -3,7 +3,7 @@ process BOLTZGEN_RUN {
     label 'process_high_gpu'
     
     // Publish results
-    publishDir "${params.outdir}/${meta.id}/boltzgen", mode: params.publish_dir_mode, saveAs: { filename -> filename }
+    publishDir { "${params.outdir}/${meta.id}/boltzgen" }, mode: params.publish_dir_mode, saveAs: { filename -> filename }
 
     container 'cr.seqera.io/scidev/boltzgen:0.1.5'
     

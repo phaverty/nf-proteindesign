@@ -300,7 +300,7 @@ workflow NFPROTEINDESIGN {
             .fromPath(params.boltz2_cache, type: 'dir', checkIfExists: true)
             .first()
     } else {
-        ch_boltz2_cache = Channel.value(file('EMPTY_BOLTZ2_CACHE'))
+        ch_boltz2_cache = Channel.value([])
     }
 
     // ========================================================================
@@ -410,7 +410,7 @@ workflow {
 
             def ch_ckpt = params.complexa_ckpt_dir ?
                 Channel.fromPath(params.complexa_ckpt_dir, type: 'dir', checkIfExists: true).first() :
-                Channel.value(file('EMPTY_CKPT'))
+                Channel.value([])
 
             TEST_COMPLEXA(ch_input, ch_ckpt)
 

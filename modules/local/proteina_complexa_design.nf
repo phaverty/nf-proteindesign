@@ -3,7 +3,7 @@ process PROTEINA_COMPLEXA_DESIGN {
     label 'process_high_gpu'
 
     // Publish results
-    publishDir "${params.outdir}/${meta.id}/proteina_complexa", mode: params.publish_dir_mode, saveAs: { filename -> filename }
+    publishDir { "${params.outdir}/${meta.id}/proteina_complexa" }, mode: params.publish_dir_mode, saveAs: { filename -> filename }
 
     container "${params.complexa_container}"
 

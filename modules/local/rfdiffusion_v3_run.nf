@@ -33,7 +33,7 @@ process RFDIFFUSION_V3_RUN {
     errorStrategy 'retry'
     maxRetries 3
 
-    publishDir "${params.outdir}/${meta.id}/rfdiffusion_v3", mode: params.publish_dir_mode
+    publishDir { "${params.outdir}/${meta.id}/rfdiffusion_v3" }, mode: params.publish_dir_mode
 
     container "${params.rfdiffusion_v3_container}"
 

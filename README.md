@@ -154,6 +154,22 @@ results/
 └── pipeline_info/         # Execution reports
 ```
 
+## ⚠️ Known Limitations
+
+- **Google Cloud Batch: model weights are re-downloaded on every task.** Each
+  Batch task runs on a fresh, ephemeral VM with no disk shared across tasks or
+  runs, and `params.boltz2_cache` / `params.cache_dir` / `params.complexa_ckpt_dir`
+  / `params.rfdiffusion_v3_ckpt_dir` default to `null`. This means every
+  `BOLTZ2_REFOLD` (and other GPU tool) task re-downloads its full model
+  weights from scratch - for Boltz-2 alone, ~1.85GB per task - rather than
+  reusing a warm cache. This is wasted network time/cost, and a real source
+  of task failures: one 6-task run hit a transient
+  `urllib.error.ContentTooShortError` mid-download, failing that task (caught
+  gracefully by `errorStrategy 'ignore'`, but still lost work).
+  Pointing those params at a persistent `gs://` cache path by default in
+  `conf/gcp_batch.config` would fix this, but needs some care around
+  concurrent tasks reading the same cache directory before it's warmed up.
+
 ## 📚 Citation
 
 If you use this pipeline, please cite:

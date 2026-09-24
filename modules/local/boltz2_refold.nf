@@ -19,9 +19,9 @@ process BOLTZ2_REFOLD {
     
     // Publish results - use parent_id to group by original design
     // meta.parent_id already points to the original sample_id from the samplesheet
-    publishDir "${params.outdir}/${meta.parent_id ?: meta.id}/boltz2", mode: params.publish_dir_mode
+    publishDir { "${params.outdir}/${meta.parent_id ?: meta.id}/boltz2" }, mode: params.publish_dir_mode
 
-    container 'giosbiostructures/boltz2:latest'
+    container 'us-central1-docker.pkg.dev/nextflow-runs/nf-proteindesign/boltz2:latest'
     
     errorStrategy 'ignore'
     
@@ -30,7 +30,7 @@ process BOLTZ2_REFOLD {
 
     input:
     tuple val(meta), path(mpnn_sequences), path(target_sequence_file), path(target_msa), path(target_template)
-    path cache_dir
+    path(cache_dir, stageAs: 'input_cache', arity: '0..*')
 
     output:
     tuple val(meta), path("${meta.id}_boltz2_output"), emit: predictions
@@ -42,7 +42,7 @@ process BOLTZ2_REFOLD {
 
     script:
     def use_msa = params.boltz2_use_msa ? '--use_msa_server' : ''
-    def cache_opt = cache_dir.name != 'EMPTY_BOLTZ2_CACHE' ? "--cache ${cache_dir}" : ''
+    def cache_opt = cache_dir ? "--cache ${cache_dir[0]}" : ''
     def num_recycling = params.boltz2_num_recycling ?: 3
     def num_diffusion = params.boltz2_num_diffusion ?: 5
     def has_target_msa = target_msa.name != 'NO_MSA'
@@ -245,7 +245,7 @@ Input:
   - Target sequence length: \${#TARGET_SEQ}
 
 Parameters:
-  - Cache directory: ${cache_dir.name != 'EMPTY_BOLTZ2_CACHE' ? cache_dir.toString() : 'default (~/.boltz)'}
+  - Cache directory: ${cache_dir ? cache_dir[0].toString() : 'default (~/.boltz)'}
   - Recycling steps: ${num_recycling}
   - Diffusion samples: ${num_diffusion}
   - Use MSA: ${params.boltz2_use_msa}

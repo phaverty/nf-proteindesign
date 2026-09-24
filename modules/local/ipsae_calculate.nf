@@ -3,7 +3,7 @@ process IPSAE_CALCULATE {
     label 'process_low'
     
     // Publish results - use parent_id to group by original design
-    publishDir "${params.outdir}/${meta.parent_id ?: meta.id}/ipsae", mode: params.publish_dir_mode, saveAs: { filename -> filename }
+    publishDir { "${params.outdir}/${meta.parent_id ?: meta.id}/ipsae" }, mode: params.publish_dir_mode, saveAs: { filename -> filename }
 
     container 'community.wave.seqera.io/library/numpy:2.3.5--f8d2712d76b3e3ce'
 
