@@ -3,7 +3,7 @@ process PRODIGY_PREDICT {
     label 'process_low'
     
     // Publish results
-    publishDir "${params.outdir}/${meta.parent_id ?: meta.id}/prodigy", mode: params.publish_dir_mode
+    publishDir { "${params.outdir}/${meta.parent_id ?: meta.id}/prodigy" }, mode: params.publish_dir_mode
 
     container 'community.wave.seqera.io/library/gcc_linux-64_pip_prodigy-prot:2e23eabd18cdbd0a'
 

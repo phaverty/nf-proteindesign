@@ -2,7 +2,7 @@ process CREATE_DESIGN_SAMPLESHEET {
     tag "${meta.id}"
     label 'process_low'
     
-    publishDir "${params.outdir}/${meta.id}", mode: params.publish_dir_mode
+    publishDir { "${params.outdir}/${meta.id}" }, mode: params.publish_dir_mode
 
     container 'python:3.11'
 

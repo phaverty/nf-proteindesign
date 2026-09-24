@@ -3,7 +3,7 @@ process FOLDSEEK_SEARCH {
     label 'process_medium'
 
     // Publish results
-    publishDir "${params.outdir}/${meta.parent_id ?: meta.id}/foldseek", mode: params.publish_dir_mode
+    publishDir { "${params.outdir}/${meta.parent_id ?: meta.id}/foldseek" }, mode: params.publish_dir_mode
 
     container 'ghcr.io/steineggerlab/foldseek:master-cuda12'
 
